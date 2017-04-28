@@ -1,0 +1,10 @@
+Right now:  Can only detect things that are defined in root
+            Can only detect imported modules that are written as "import 'name'"
+
+missing import checks:
+            Needs to be able to find "from module import function" imports
+            Needs to be able to find "from module import class" imports
+
+
+way of fixing:
+            Crawl the bloody .py files instead of importing meta info
