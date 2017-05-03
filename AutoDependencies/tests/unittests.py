@@ -6,68 +6,101 @@ class TestAutodependencies(unittest.TestCase):
     def setUp(self):
         self.x = "what"
 
-    def testNoImport(self):
-        testString = """hello world
-                        this is a multiline String, but without any i mports
-                        """
+    def testReadFileWithoutImports(self):
+        testFile = open('testfiles/testWithOutImports.txt', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, [])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+        testFile.close()
+        self.assertEqual(results, [])
 
-    def testNoImport2(self):
-        testString = """hello world
-                        this is a multiline String, but without any simports
-                        """
+    def testReadFileWithTwoImports(self):
+        testFile = open('testfiles/testWithTwoImports.txt', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, [])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+        testFile.close()
+        self.assertEqual(results, [['sys'], ['random']])
 
-    def testOneImport(self):
-        testString = """hello world
-                        this is a multiline String, but WITH one import, namely:
-                        importsys
-                        """
+    def testReadFileWithTwoCommaImports(self):
+        testFile = open('testfiles/testWithTwoCommaSeperatedImports.txt', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, [])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+        testFile.close()
+        self.assertEqual(results, [['sys', 'random']])
 
-    def testOneImport2(self):
-        testString = """hello world
-                        this is a multiline String, but WITH one import, namely:
-                        import sys
-                        """
+    def testReadFileWithFiveCommaImports(self):
+        testFile = open('testfiles/testWith5CommaSeperatedImports.txt', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, ['import sys'])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
 
+        testFile.close()
+        self.assertEqual(results, [['sys','random','numpy','skyfield','gps']])
 
-    def testOneImportWithManySpaces(self):
-        testString = """hello world
-                        this is a multiline String, but WITH one import, namely:
-                        import                      sys
-                        """
+    def testReadFileWithOneFromImport(self):
+        testFile = open('testfiles/testWithOneFromImport.txt', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, ['import                      sys'])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
 
-    def testTwoImport(self):
-        testString = """hello world
-                        this is a multiline String, but WITH one import, namely:
-                        import sys
-                        import random
-                        """
-        autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, ['import sys', 'import random'])
+        testFile.close()
+        self.assertEqual(results, [['numpy']])
 
-    def testTwoImportCommaSeperated(self):
-        testString = """hello world
-                        this is a multiline String, but WITH two import, namely:
-                        import sys, random
-                        """
+    def testReadMainpyFile(self):
+        testFile = open('testfiles/main.py', 'r')
         autoD = autodependencies.AutoDependency()
-        result = autoD.findImports(testString)
-        self.assertEqual(result, ['import sys, random'])
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['sys'], ['optparse'], ['Days'], ['Utility']])
+
+    def testReadImportWithinFunctionFile(self):
+        testFile = open('testfiles/testImportsWithinFunction.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random']])
+
+    def testReadFromImportWithinFunctionFile(self):
+        testFile = open('testfiles/testFromImportWithinFunction.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random']])
+
+
+    
 
 # class test(unittest.TestCase):
     

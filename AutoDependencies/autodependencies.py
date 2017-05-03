@@ -25,13 +25,28 @@ class AutoDependency():
 
     def findImports(self, inputString):
 
-        #regEx = re.compile('import[\t\w]')
-        regEx = re.compile(r'import[\s\t]+[a-zA-Z]+[a-zA-Z0-9]*[\s\t]*')
-        # regEx = re.compile(r'((a|b))+')
-        # m = re.search(r'\bAlgae\s+([0-9.]+)', s)
-        result = regEx.findall(inputString)
+        regEx = re.compile(r'import[ ]+[a-zA-Z]+[a-zA-Z0-9]*[ ]*')
 
-        return result
+        result = regEx.findall(inputString)
+        stringList = None
+        stringListUpdated = []
+
+        if result:
+            stringList = inputString.split(",")
+            for string in stringList:
+
+                s = string.replace("\n", "")
+                s = s.strip()
+                if s.startswith('from'):
+                    s = s.split(" ")
+                    s = s[1]
+                else:
+                    s = s.replace("import", "")
+                    # s = s.strip()
+                
+                stringListUpdated.append(s)
+
+        return stringListUpdated
 
 
 if __name__ == '__main__':
