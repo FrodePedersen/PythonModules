@@ -1,11 +1,5 @@
-import re, itertools
+a = set()
+a.add("hey")
+a.add("boo")
 
-try:
-    import baconhameggs
-except ImportError:
-    pass
-
-try:
-    import guido.python.ham
-except ImportError:
-    pass
+print(a)

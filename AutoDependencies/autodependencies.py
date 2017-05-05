@@ -8,10 +8,36 @@ class AutoDependency():
     def __init__(self):
         self.insideMultilineComment = False
 
-    def findFilesInFolder(self):
-        #find all the files ending with a .py extension
-        onlyPyfiles = [f for f in os.listdir(os.path.dirname(os.path.abspath(__file__))) if (os.path.isfile(os.path.join("", f)) and (re.match("^.*\.py$",f) != None ))]
-        print(onlyPyfiles)
+    def findDependencies(self, inputPath, fileEnding=""):
+        setOfDependencies = set()
+
+        fileNames = self.findFilesInFolder(inputPath, fileEnding)
+        imports = []
+        for fileName in fileNames:
+            file = open(fileName, "r")
+            for line in file:
+                result = self.findImports(line)
+                if result:
+                    for r in result:
+                        setOfDependencies.add(r)
+            file.close()
+
+        return setOfDependencies
+
+    def findFilesInFolder(self, inputPath, fileEnding=""):
+        #find all the files ending with a fileEnding extension
+        files = []
+        results = []
+        for(dirpath, dirnames, filenames) in os.walk(inputPath):
+            for file in filenames:
+                files.append(os.path.join(dirpath, file))
+        
+
+        for file in files:
+            if file.endswith(fileEnding):
+                results.append(file)
+
+        return results
 
     def findImports(self, inputString):
 
