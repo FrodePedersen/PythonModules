@@ -64,7 +64,7 @@ class TestAutodependencies(unittest.TestCase):
         self.assertEqual(results, [['numpy']])
 
     def testReadMainpyFile(self):
-        testFile = open('testfiles/main.py', 'r')
+        testFile = open('testfiles/testMain.py', 'r')
         autoD = autodependencies.AutoDependency()
         results = []
         for line in testFile:
@@ -89,6 +89,78 @@ class TestAutodependencies(unittest.TestCase):
 
     def testReadFromImportWithinFunctionFile(self):
         testFile = open('testfiles/testFromImportWithinFunction.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random']])
+
+    def testMultipleImportsOneLine(self):
+        testFile = open('testfiles/testMultipleImportsOneLine.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random', 'numpy']])
+
+    def testMultipleImportsOneLinex5(self):
+        testFile = open('testfiles/testMultipleImportsOneLinex5.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random', 'numpy', 'os', 'unittest', 'sys']])
+
+    def testWithCommentedImport(self):
+        testFile = open('testfiles/testWithCommentedImport.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [])
+
+    def testWithCommentedImport2(self):
+        testFile = open('testfiles/testWithCommentedImport2.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [])
+
+    def testWithPrintBeforeImport(self):
+        testFile = open('testfiles/testWithPrintBeforeImport.py', 'r')
+        autoD = autodependencies.AutoDependency()
+        results = []
+        for line in testFile:
+            result = autoD.findImports(line)
+            if result:
+                results.append(result)
+
+        testFile.close()
+        self.assertEqual(results, [['random']])
+
+    def testImportInsideMultilineComment(self):
+        testFile = open('testfiles/testImportInsideMultilineComment.py', 'r')
         autoD = autodependencies.AutoDependency()
         results = []
         for line in testFile:

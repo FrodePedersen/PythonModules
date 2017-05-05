@@ -6,7 +6,7 @@ import inspect #allows inspection of modules
 class AutoDependency():
 
     def __init__(self):
-        pass
+        self.insideMultilineComment = False
 
     def findFiles(self):
         #find all the files ending with a .py extension
@@ -25,26 +25,36 @@ class AutoDependency():
 
     def findImports(self, inputString):
 
-        regEx = re.compile(r'import[ ]+[a-zA-Z]+[a-zA-Z0-9]*[ ]*')
-
-        result = regEx.findall(inputString)
-        stringList = None
+        strippedInputString = inputString.strip()
+        stringList = []
         stringListUpdated = []
+        splitStrippedList = []
+        splitStringList = strippedInputString.split(";") #incase they write imports like: import sys; import random
 
-        if result:
-            stringList = inputString.split(",")
-            for string in stringList:
 
-                s = string.replace("\n", "")
+        for s in splitStringList:
+            splitStrippedList.append(s.strip())         #Strip each of the strings seperated by ;
+
+        for s in splitStrippedList:
+            if(s.startswith("'''")):
+                self.insideMultilineComment = not self.insideMultilineComment
+            if(self.insideMultilineComment):
+                return []    
+            if(not (s.startswith("from") or s.startswith("import"))):
+                continue
+            stringList = s.split(",")                   #Split incase import sys, optparse, etc..
+
+            for s in stringList:
                 s = s.strip()
-                if s.startswith('from'):
-                    s = s.split(" ")
-                    s = s[1]
-                else:
-                    s = s.replace("import", "")
-                    # s = s.strip()
-                
-                stringListUpdated.append(s)
+                if not s.startswith('#'):
+                    if s.startswith('from'):
+                        s = s.split(" ")
+                        s = s[1]
+                    else:
+                        s = s.replace("import", "")
+                        s = s.strip()
+                    
+                    stringListUpdated.append(s)
 
         return stringListUpdated
 
@@ -53,19 +63,3 @@ if __name__ == '__main__':
 
     autodependency = AutoDependency()
     autodependency.findFiles()
-    #autodependency.run()
-    
-
-    # finder = modulefinder.ModuleFinder(debug=1)
-    # finder.run_script("test.py") 
-    # finder.report()
-    # #print('Loaded modules:')
-    # # for name, mod in finder.modules.items():
-    # #     print('%s: ' % name, end='')
-    # #     #print(','.join(list(mod.globalnames.keys())[:3]))
-
-    # # print('-'*50)
-    # # print('Modules not imported:')
-    # # print('\n'.join(finder.badmodules.keys()))
-
-
