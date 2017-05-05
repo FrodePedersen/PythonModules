@@ -73,7 +73,9 @@ class AutoDependency():
                 else:
                     s = s.replace("import", "")
                     s = s.strip()
+                    s = s.split(" ")[0]
 
+                s = s.split(".")[0]
                 stringListUpdated.append(s)
                 
                 if comment:
@@ -85,4 +87,4 @@ class AutoDependency():
 if __name__ == '__main__':
 
     autodependency = AutoDependency()
-    autodependency.findFiles()
+    print(autodependency.findDependencies("tests", ".py"))
