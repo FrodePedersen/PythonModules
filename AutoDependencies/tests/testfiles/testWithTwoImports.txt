@@ -1,4 +1,0 @@
-hello world
-this is a multiline String, but WITH two import, namely
-import sys
-import random

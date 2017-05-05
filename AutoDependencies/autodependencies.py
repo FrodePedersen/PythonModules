@@ -8,20 +8,10 @@ class AutoDependency():
     def __init__(self):
         self.insideMultilineComment = False
 
-    def findFiles(self):
+    def findFilesInFolder(self):
         #find all the files ending with a .py extension
-        self.onlyPyfiles = [f for f in os.listdir(os.path.dirname(os.path.abspath(__file__))) if (os.path.isfile(os.path.join("", f)) and (re.match("^.*\.py$",f) != None ))]
-
-        module = importlib.import_module("watershed_Alg")
-        for m in inspect.getmembers(module, inspect.ismodule):
-            print("m: " + str(m[0]))
-        #iterate over all the files found
-        # for f in self.onlyPyfiles:
-        #     module = importlib.import_module(f[:-3]) #imports the module and returns it.
-        #     print("module: " + str(module))
-        #     for m in inspect.getmembers(module, inspect.ismodule):
-        #         print("m: " + str(m[0]))
-        #     #self.modules.append(module)
+        onlyPyfiles = [f for f in os.listdir(os.path.dirname(os.path.abspath(__file__))) if (os.path.isfile(os.path.join("", f)) and (re.match("^.*\.py$",f) != None ))]
+        print(onlyPyfiles)
 
     def findImports(self, inputString):
 
@@ -46,15 +36,22 @@ class AutoDependency():
 
             for s in stringList:
                 s = s.strip()
-                if not s.startswith('#'):
-                    if s.startswith('from'):
-                        s = s.split(" ")
-                        s = s[1]
-                    else:
-                        s = s.replace("import", "")
-                        s = s.strip()
-                    
-                    stringListUpdated.append(s)
+                
+                comment = False
+                if "#" in s:
+                    comment = True
+
+                if s.startswith('from'):
+                    s = s.split(" ")
+                    s = s[1]
+                else:
+                    s = s.replace("import", "")
+                    s = s.strip()
+
+                stringListUpdated.append(s)
+                
+                if comment:
+                    return stringListUpdated
 
         return stringListUpdated
 
