@@ -1,5 +1,3 @@
-a = set()
-a.add("hey")
-a.add("boo")
+import autodependencies as autoD
 
-print(a)
+AutoD.AutoDependencies()

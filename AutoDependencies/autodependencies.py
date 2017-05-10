@@ -8,12 +8,10 @@ class AutoDependency():
     def __init__(self):
         self.insideMultilineComment = False
 
-    def findDependencies(self, inputPath, fileEnding=""):
+    def findDependencies(self, files):
         setOfDependencies = set()
-
-        fileNames = self.findFilesInFolder(inputPath, fileEnding)
         imports = []
-        for fileName in fileNames:
+        for fileName in files:
             file = open(fileName, "r")
             for line in file:
                 result = self.findImports(line)
@@ -23,6 +21,16 @@ class AutoDependency():
             file.close()
 
         return setOfDependencies
+
+    def findExternalImports(self):
+        pass
+
+    def findLocalImports(self, filePaths, setOfDependencies):
+        fileNames = set()
+        for path in filePaths:
+            fileNames.add(os.path.basename(path).split(".")[0])
+        print("fileNames: " + str(fileNames))
+        return setOfDependencies.intersection(set(fileNames))
 
     def findFilesInFolder(self, inputPath, fileEnding=""):
         #find all the files ending with a fileEnding extension
