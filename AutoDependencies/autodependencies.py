@@ -23,9 +23,12 @@ class AutoDependency():
 
         return setOfDependencies
 
-    def findExternalImports(self):
-        pass
-
+    def findExternalImports(self, filePaths):
+        allDependencies = self.findDependencies(filePaths)
+        localModules = self.findLocalImports(filePaths, allDependencies)
+        builtinImports = self.findBuiltinImports(allDependencies)
+        return ((allDependencies - localModules) - builtinImports)
+        
     def findLocalImports(self, filePaths, setOfDependencies):
         fileNames = set()
         for path in filePaths:
