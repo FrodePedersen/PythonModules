@@ -14,7 +14,6 @@ class TestAutodependenciesFindExternalDependencies(unittest.TestCase):
         autoD = autodependencies.AutoDependency()
         files = autoD.findFilesInFolder("testfiles/findLocalImports/test2", ".py")
         allDependencies = autoD.findDependencies(files)
-        print("all dependencies" + str(allDependencies))
         results = autoD.findLocalImports(files, allDependencies)
         self.assertEqual(results, set(["Utility", "context", "NJ", "TestEnvironment", "Matrix"]))
 

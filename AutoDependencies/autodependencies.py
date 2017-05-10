@@ -1,5 +1,6 @@
 import os #allows os utilities
 import re #allows regular expressions
+import sys
 import importlib #allows dynamical imports of modules
 import inspect #allows inspection of modules
 
@@ -29,8 +30,15 @@ class AutoDependency():
         fileNames = set()
         for path in filePaths:
             fileNames.add(os.path.basename(path).split(".")[0])
-        print("fileNames: " + str(fileNames))
         return setOfDependencies.intersection(set(fileNames))
+
+    def findBuiltinImports(self, setOfDependencies):
+        builtinImports = set()
+        for module in setOfDependencies:
+            if module in sys.builtin_module_names:
+                builtinImports.add(module)
+
+        return builtinImports
 
     def findFilesInFolder(self, inputPath, fileEnding=""):
         #find all the files ending with a fileEnding extension

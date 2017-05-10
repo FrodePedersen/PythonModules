@@ -1,10 +1,6 @@
-Right now:  Can only detect things that are defined in root
-            Can only detect imported modules that are written as "import 'name'"
+TODO:
+    make test for: from random import x,y,z : might mess up for x,y,z
 
-missing import checks:
-            Needs to be able to find "from module import function" imports
-            Needs to be able to find "from module import class" imports
+    make find builtins independent on current python installation. Make version a parameter
 
-
-way of fixing:
-            Crawl the bloody .py files instead of importing meta info
+    
